@@ -54,14 +54,14 @@ fileprivate func generateCubeVertices() -> (vertices: [HelloShading3DRenderer.Ve
     //   |/        |/
     //  lln ----- lrn -- n: near
     //
-    let lln = simd_float3(-1, -1, -1)
-    let llf = simd_float3(-1, -1, +1)
-    let uln = simd_float3(-1, +1, -1)
-    let ulf = simd_float3(-1, +1, +1)
-    let lrn = simd_float3(+1, -1, -1)
-    let lrf = simd_float3(+1, -1, +1)
-    let urn = simd_float3(+1, +1, -1)
-    let urf = simd_float3(+1, +1, +1)
+    let lln = simd_float3(-1, -1, +1)
+    let llf = simd_float3(-1, -1, -1)
+    let uln = simd_float3(-1, +1, +1)
+    let ulf = simd_float3(-1, +1, -1)
+    let lrn = simd_float3(+1, -1, +1)
+    let lrf = simd_float3(+1, -1, -1)
+    let urn = simd_float3(+1, +1, +1)
+    let urf = simd_float3(+1, +1, -1)
     
     // normals
     let front = simd_float3(0, 0, 1)

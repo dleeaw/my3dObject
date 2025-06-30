@@ -41,10 +41,10 @@ struct Camera: Equatable {
     var viewMatrix: simd_float4x4 {
         // LookAtRH
         let eye = mix(self.at, self.eye, t: self.zoomFactor)
-        let f = normalize(eye - at)
-        let s = normalize(cross(up, f))
-        let u = cross(f, s)
-        let t = -simd_float3(dot(s, eye), dot(u, eye), dot(f, eye))
+        let f = normalize(at - eye)
+        let s = normalize(cross(f, up))
+        let u = cross(s, f)
+        let t = -simd_float3(dot(s, eye), dot(u, eye), dot(-f, eye))
         
         return .init(.init(s.x, u.x, -f.x, 0),
                      .init(s.y, u.y, -f.y, 0),
