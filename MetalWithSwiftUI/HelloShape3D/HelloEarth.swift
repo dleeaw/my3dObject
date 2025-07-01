@@ -46,9 +46,78 @@ final class HelloEarth: HelloShading3DObject {
 
 fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.Vertex], indices: [UInt16])
 {
-    let vertices: [HelloShading3DRenderer.Vertex] = []
+    let radius: Float = 1.0     // unit sphere
+    let latitude = 40           // 위도 - 가로선 - 높이 - stack을 "40"개로 분할
+    let longitude = 40          // 경도 - 세로선 - 너비 - sector를 "40"개로 분할
     
-    let indices: [UInt16] = []
+    // Arrays where I can store vertex data and index data
+    var vertices: [HelloShading3DRenderer.Vertex] = []
+    var indices: [UInt16] = []
+    
+    // 1) Build vertices
+    for countLon in 0...longitude {
+        let theta = 2 * (.pi) * Float(countLon/longitude)
+        let cosθ = cos(theta)
+        let sinθ = sin(theta)
+        
+        for countLat in 0...latitude {
+            let phi = (.pi) * Float(countLat/latitude)
+            let cosφ = cos(phi)
+            let sinφ = sin(phi)
+            
+            // Cartesian coordinate on unit sphere
+            let x = cosφ * cosθ
+            let y = cosφ * sinθ
+            let z = sinφ
+            
+            // Get the position vector, normal vector, and text coordinate vector
+            let position = SIMD3<Float>(x, y, z) * radius
+            let normal = normalize(SIMD3<Float>(x, y, z))
+            let textcoord = SIMD2<Float>(Float(countLon/longitude),
+                                         Float(countLat/latitude))
+            
+            // Add to vertices array
+            vertices.append(
+                HelloShading3DRenderer.Vertex(
+                    position: position,
+                    normal: normal,
+                    texcoord: textcoord)
+            )
+        }
+    }
+    
+    // 2) Build index list
+    // triangle index in sphere
+    //
+    //                (c)th column         (c+1)th column
+    //
+    // (r)th row:       topLeft ------------ topRight
+    //                   (r,c)               (r, c+1)
+    //                     |                /    |
+    //                     ↓          /          ↑
+    //                     |    /                |
+    // (r+1)th row:     bottomLeft --→---→-- bottomRight
+    //                  (r+1, c)             (r+1, c+1)
+    //
+    // triangle A: topLeft → bottomLeft → topRight
+    // triangle B: topRight → bottomLeft → bottomRight
+    
+    let cols = longitude + 1    // total numbers of column in the sphere
+    
+    for r in 0..<latitude {                                 // current row
+        for c in 0..<longitude {                            // current column
+            let topLeft     = UInt16( r * cols + c )        // ex) triangle in 2nd row, 3rd column
+            let bottomLeft  = UInt16( (r+1) * cols + c )    // index = 2 * 40 + 3 = 83
+            let topRight    = UInt16( r * cols + c+1 )
+            let bottomRight = UInt16( (r+1) * cols + c+1 )
+            
+            // Triangle A
+            indices += [topLeft, bottomLeft, topRight]      // counterclockwise direction
+            
+            // Triangle B
+            indices += [topRight, bottomLeft, bottomRight]  // counterclockwise direction
+        }
+    }
     
     return (vertices: vertices, indices: indices)
 }
