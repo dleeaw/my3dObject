@@ -11,7 +11,8 @@ import SwiftUI
 
 enum Shape3DType: String, CaseIterable {
     // Add 3d shape types
-    case cube
+    case cube = "Cube"
+    case sphere = "Sphere"
 }
 
 fileprivate struct ControlView: View {
@@ -19,10 +20,23 @@ fileprivate struct ControlView: View {
     @Environment(HelloShape3DModel.self) private var content
     
     var body: some View {
-        // replace EmptyView by your controls
-        EmptyView()
+        @Bindable var content = content
+        
+        VStack {
+            HStack {
+                Text("Object: ")
+                Picker(selection: $content.shapeType) {
+                    ForEach(Shape3DType.allCases, id: \.self) { type in
+                        Text(type.rawValue)
+                        }
+                    } label: {
+                        EmptyView()
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+        }
     }
-}
 
 struct HelloShape3DView: View {
     

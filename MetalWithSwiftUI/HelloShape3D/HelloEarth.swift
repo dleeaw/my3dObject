@@ -46,7 +46,7 @@ final class HelloEarth: HelloShading3DObject {
 
 fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.Vertex], indices: [UInt16])
 {
-    let radius: Float = 1.0     // unit sphere
+    let radius: Float = 2.0     // unit sphere
     let latitude = 40           // 위도 - 가로선 - 높이 - stack을 "40"개로 분할
     let longitude = 40          // 경도 - 세로선 - 너비 - sector를 "40"개로 분할
     
@@ -55,15 +55,15 @@ fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.
     var indices: [UInt16] = []
     
     // 1) Build vertices
-    for countLon in 0...longitude {
-        let theta = 2 * (.pi) * Float(countLon/longitude)
-        let cosθ = cos(theta)
-        let sinθ = sin(theta)
+    for countLat in 0...latitude {
+        let phi = ((.pi)/2) - (.pi) * (Float(countLat)/Float(latitude))
+        let cosφ = cos(phi)
+        let sinφ = sin(phi)
         
-        for countLat in 0...latitude {
-            let phi = (.pi) * Float(countLat/latitude)
-            let cosφ = cos(phi)
-            let sinφ = sin(phi)
+        for countLon in 0...longitude {
+            let theta = 2 * (.pi) * (Float(countLon)/Float(longitude))
+            let cosθ = cos(theta)
+            let sinθ = sin(theta)
             
             // Cartesian coordinate on unit sphere
             let x = cosφ * cosθ
@@ -73,8 +73,8 @@ fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.
             // Get the position vector, normal vector, and text coordinate vector
             let position = SIMD3<Float>(x, y, z) * radius
             let normal = normalize(SIMD3<Float>(x, y, z))
-            let textcoord = SIMD2<Float>(Float(countLon/longitude),
-                                         Float(countLat/latitude))
+            let textcoord = SIMD2<Float>(Float(countLon)/Float(longitude),
+                                         Float(countLat)/Float(latitude))
             
             // Add to vertices array
             vertices.append(
@@ -115,7 +115,7 @@ fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.
             indices += [topLeft, bottomLeft, topRight]      // counterclockwise direction
             
             // Triangle B
-            indices += [topRight, bottomLeft, bottomRight]  // counterclockwise direction
+            indices += [bottomLeft, bottomRight, topRight]  // counterclockwise direction
         }
     }
     

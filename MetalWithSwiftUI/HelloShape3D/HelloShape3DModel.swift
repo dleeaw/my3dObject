@@ -17,6 +17,7 @@ final class HelloShape3DModel {
     private let renderer: HelloShading3DRenderer
     
     private let cube: HelloCube
+    private let sphere: HelloEarth
     
     private var trackball: Trackball
     
@@ -35,6 +36,7 @@ final class HelloShape3DModel {
         let renderer = HelloShading3DRenderer(device, library)
         
         let cube = HelloCube(device)
+        let sphere = HelloEarth(device)
         
         let camera = Camera(eye: .init(0, 0, 5), at: .zero, up: .init(0, 1, 0),
                             fovy: 2.0 * .pi / 3.0, aspectRatio: 1.0, near: 0.001, far: 10.0)
@@ -46,6 +48,7 @@ final class HelloShape3DModel {
         // initialize your properties here
         self.renderer = renderer
         self.cube = cube
+        self.sphere = sphere
         self.trackball = trackball
         
         self.renderer.updateLightPosition(normalize(.init(1, 1, 1)) * sqrt(3))
@@ -104,8 +107,9 @@ final class HelloShape3DModel {
         else { return }
         
         // invoke draw calls with your renderers here
-        let model = switch shapeType {
-        case .cube: self.cube
+        let model: HelloShading3DObject = switch shapeType {
+        case .cube:   self.cube   as HelloShading3DObject
+        case .sphere: self.sphere as HelloShading3DObject
         }
         self.renderer.draw(model, encoder)
         
