@@ -13,6 +13,7 @@ enum Shape3DType: String, CaseIterable {
     // Add 3d shape types
     case cube = "Cube"
     case sphere = "Sphere"
+    case cone = "Cone"
 }
 
 fileprivate struct ControlView: View {

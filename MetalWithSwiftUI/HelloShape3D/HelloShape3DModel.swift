@@ -16,6 +16,7 @@ final class HelloShape3DModel {
     private let commandQueue: MTLCommandQueue
     private let renderer: HelloShading3DRenderer
     
+    private let cone: HelloCone
     private let cube: HelloCube
     private let sphere: HelloEarth
     
@@ -37,6 +38,8 @@ final class HelloShape3DModel {
         
         let cube = HelloCube(device)
         let sphere = HelloEarth(device)
+        let cone = try! HelloCone(device: device, radius: 1.0, height: 2.0, segments: 40)
+        
         
         let camera = Camera(eye: .init(0, 0, 5), at: .zero, up: .init(0, 1, 0),
                             fovy: 2.0 * .pi / 3.0, aspectRatio: 1.0, near: 0.001, far: 10.0)
@@ -49,6 +52,7 @@ final class HelloShape3DModel {
         self.renderer = renderer
         self.cube = cube
         self.sphere = sphere
+        self.cone = cone
         self.trackball = trackball
         
         self.renderer.updateLightPosition(normalize(.init(1, 1, 1)) * sqrt(3))
@@ -110,6 +114,7 @@ final class HelloShape3DModel {
         let model: HelloShading3DObject = switch shapeType {
         case .cube:   self.cube   as HelloShading3DObject
         case .sphere: self.sphere as HelloShading3DObject
+        case .cone:   self.cone   as HelloShading3DObject
         }
         self.renderer.draw(model, encoder)
         
