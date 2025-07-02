@@ -84,14 +84,14 @@ fileprivate func generateConeVertices(radius: Float, height: Float, segmentCount
      
      */
     
-    for t in 0..<segmentCount {
-        let nowRim = UInt16(2 + t)                       // if segmentCount = 4 and nowRim = 3
-        let nextRim = UInt16(2 + ((t+1) % segmentCount)) // nextRim = 0 (not 4) 0→1→2→3→0
+    for slice in 0..<segmentCount {
+        let nowRim = UInt16(2 + slice)                       // if segmentCount = 4 and nowRim = 3
+        let nextRim = UInt16(2 + ((slice+1) % segmentCount)) // nextRim = 0 (not 4) 0→1→2→3→0
         
         // Side triangle
         indices += [apexIndex, nowRim, nextRim]
         
-        // Base triange
+        // Base triangle
         indices += [baseCenterIndex, nextRim, nowRim]
     }
     
@@ -109,9 +109,9 @@ final class HelloCone: HelloShading3DObject {
     var texture: (any MTLTexture)?
     
     init(device: MTLDevice,
-         radius: Float,
-         height: Float,
-         segments: Int) throws
+         radius: Float = 1,
+         height: Float = 2,
+         segments: Int = 40) throws
     {
         self.device = device
         
