@@ -115,7 +115,7 @@ fileprivate func generateSphereVertices() -> (vertices: [HelloShading3DRenderer.
             indices += [topLeft, bottomLeft, topRight]      // counterclockwise direction
             
             // Triangle B
-            indices += [bottomLeft, bottomRight, topRight]  // counterclockwise direction
+            indices += [topRight, bottomLeft, bottomRight]  // counterclockwise direction
         }
     }
     
