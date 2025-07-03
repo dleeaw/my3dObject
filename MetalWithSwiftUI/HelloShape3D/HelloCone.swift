@@ -132,15 +132,15 @@ final class HelloCone: HelloShading3DObject {
         let indexBufferLength = indexStride * mesh.indices.count
         let indexBuffer = device.makeBuffer(bytes: mesh.indices, length: indexBufferLength)!
         
-        // Load the texture of the cone into a GPU
-//        let textureLoader = MTKTextureLoader(device: device)
-//        let texture = try! textureLoader.newTexture(name: "checker", scaleFactor: 1.0, bundle: .main, options: [.SRGB: false])
+        //Load the texture of the cone into a GPU
+        let textureLoader = MTKTextureLoader(device: device)
+        let texture = try! textureLoader.newTexture(name: "iceblue", scaleFactor: 1.0, bundle: .main, options: [.SRGB: false])
         
         // Store everything into my cone's property
         self.vertexBuffer = vertexBuffer
         self.indexBuffer = indexBuffer
         self.indexCount = mesh.indices.count
-//        self.texture = texture
+        self.texture = texture
         
     }
 }
