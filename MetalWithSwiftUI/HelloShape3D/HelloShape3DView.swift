@@ -24,6 +24,36 @@ fileprivate struct ControlView: View {
         @Bindable var content = content
         
         VStack {
+            if content.shapeType == .cone {
+                VStack {
+                    // Radius control
+                    HStack {
+                        Text("Radius: \(content.coneRadius, format: .number.precision(.fractionLength(1)))")
+                        Slider(value: $content.coneRadius,
+                               in: 0.1...5.0,
+                               step: 0.1)
+                    }
+                    // Height control
+                    HStack {
+                        Text("Height: \(content.coneHeight, format: .number.precision(.fractionLength(1)))")
+                        Slider(value: $content.coneHeight,
+                               in: 0.1...10.0,
+                               step: 0.1)
+                    }
+                    // Segment control
+                    HStack {
+                        Text("Segments: \(content.coneSegments, format: .number.precision(.fractionLength(1)))")
+                        Slider(value: Binding(
+                            get: { Float(content.coneSegments) },
+                            set: { content.coneSegments = Int($0) }
+                        ), in: 3...50, step: 1)
+                    }
+                }
+                .padding()
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                .padding(.top, 5)
+            }
+            
             HStack {
                 Text("Object: ")
                 Picker(selection: $content.shapeType) {
@@ -34,10 +64,10 @@ fileprivate struct ControlView: View {
                         EmptyView()
                     }
                     .pickerStyle(.segmented)
-                }
             }
         }
     }
+}
 
 struct HelloShape3DView: View {
     

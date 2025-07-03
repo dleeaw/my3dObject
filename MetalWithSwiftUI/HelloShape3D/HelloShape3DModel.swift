@@ -16,7 +16,7 @@ final class HelloShape3DModel {
     private let commandQueue: MTLCommandQueue
     private let renderer: HelloShading3DRenderer
     
-    private let cone: HelloCone
+    private var cone: HelloCone
     private let cube: HelloCube
     private let sphere: HelloEarth
     
@@ -27,7 +27,23 @@ final class HelloShape3DModel {
     
     var shapeType: Shape3DType = .cube
     
+    // This is for adjusting properties of cone using slider
+    var coneRadius: Float = 2.0 {
+        didSet { regenerateCone() }
+    }
+    var coneHeight: Float = 5.0 {
+        didSet { regenerateCone() }
+    }
+    var coneSegments: Int = 40 {
+        didSet { regenerateCone() }
+    }
+    
     init() {
+        
+        // These variables are to initialise the Cone
+        let initialRadius: Float = 2.0
+        let initialHeight: Float = 5.0
+        let initialSegments: Int = 40
         
         let device = MTLCreateSystemDefaultDevice()!
         let commandQueue = device.makeCommandQueue()!
@@ -38,7 +54,10 @@ final class HelloShape3DModel {
         
         let cube = HelloCube(device)
         let sphere = HelloEarth(device)
-        let cone = try! HelloCone(device: device, radius: 1.0, height: 2.0, segments: 40)
+        let cone = try! HelloCone(device: device,
+                                  radius: initialRadius,
+                                  height: initialHeight,
+                                  segments: initialSegments)
         
         
         let camera = Camera(eye: .init(0, 0, 5), at: .zero, up: .init(0, 1, 0),
@@ -60,6 +79,14 @@ final class HelloShape3DModel {
         self.renderer.updateLightIntensity(1.0)
         self.renderer.updateAmbientIntensity(0.4)
         self.renderer.updateSpecularPower(0.3)
+    }
+    
+    // Function to update the cone with new values
+    private func regenerateCone() {
+        self.cone = try! HelloCone(device: self.device,
+                                   radius: self.coneRadius,
+                                   height: self.coneHeight,
+                                   segments: self.coneSegments)
     }
     
     func onViewResized(_ view: MTKView, _ size: CGSize) {

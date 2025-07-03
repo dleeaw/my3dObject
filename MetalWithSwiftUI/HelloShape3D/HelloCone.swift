@@ -105,7 +105,7 @@ final class HelloCone: HelloShading3DObject {
     var indexBuffer: any MTLBuffer
     var indexType: MTLIndexType = .uint16
     var indexCount: Int
-    var modelMatrix: simd_float4x4 = .init(0.67)
+    var modelMatrix: simd_float4x4 = .init(1)
     var texture: (any MTLTexture)?
     
     init(device: MTLDevice,
