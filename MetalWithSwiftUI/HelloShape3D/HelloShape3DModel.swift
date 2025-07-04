@@ -143,6 +143,17 @@ final class HelloShape3DModel {
         case .sphere: self.sphere as HelloShading3DObject
         case .cone:   self.cone   as HelloShading3DObject
         }
+        
+        // Determine the light position
+        let lightPosition: simd_float3
+        if shapeType == .cone {
+            lightPosition = simd_float3(0, self.coneHeight, 0)
+        } else {
+            lightPosition = normalize(.init(1, 1, 1)) * sqrt(3)
+        }
+        self.renderer.updateLightPosition(lightPosition)
+        
+        // draw the 3d object
         self.renderer.draw(model, encoder)
         
         encoder.endEncoding()
