@@ -27,6 +27,9 @@ final class HelloShape3DModel {
     
     var shapeType: Shape3DType = .cube
     
+    // This is for adjusting the light intensity using slider
+    var lightIntensity: Float = 1.0
+    
     // This is for adjusting properties of cone using slider
     var coneRadius: Float = 2.0 {
         didSet { regenerateCone() }
@@ -76,7 +79,7 @@ final class HelloShape3DModel {
         
         self.renderer.updateLightPosition(normalize(.init(1, 1, 1)) * sqrt(3))
         self.renderer.updateLightColor(.one)
-        self.renderer.updateLightIntensity(1.0)
+        self.renderer.updateLightIntensity(self.lightIntensity)
         self.renderer.updateAmbientIntensity(0.4)
         self.renderer.updateSpecularPower(0.3)
     }
@@ -152,6 +155,9 @@ final class HelloShape3DModel {
             lightPosition = normalize(.init(1, 1, 1)) * sqrt(3)
         }
         self.renderer.updateLightPosition(lightPosition)
+        
+        // Update the adjusted light intensity
+        self.renderer.updateLightIntensity(self.lightIntensity)
         
         // draw the 3d object
         self.renderer.draw(model, encoder)

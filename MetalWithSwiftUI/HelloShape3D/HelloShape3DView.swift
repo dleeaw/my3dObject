@@ -26,6 +26,13 @@ fileprivate struct ControlView: View {
         VStack {
             if content.shapeType == .cone {
                 VStack {
+                    // Light Intensity control
+                    HStack {
+                        Text("Light: \(content.lightIntensity, format: .percent.precision(.fractionLength(0)))")
+                        Slider(value: $content.lightIntensity,
+                               in: 0.0...1.0,
+                               step: 0.01)
+                    }
                     // Radius control
                     HStack {
                         Text("Radius: \(content.coneRadius, format: .number.precision(.fractionLength(1)))")
